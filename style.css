@@ -1,0 +1,47 @@
+html, body {
+    margin: 0px;
+    padding: 0px;
+    font-family: sans-serif;
+}
+header {
+    background-color: #ccc;
+    padding: 15px;
+    margin-bottom: 25px;
+}
+.wrapper {
+    width: 66%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 100px;
+}
+.container {
+    border: 1px solid #cccccc;
+}
+.card {
+    padding: 15px;
+    display: flex;
+    border-bottom: 1px solid #cccccc;
+}
+.card:last-child {
+    border-bottom: none;
+}
+.card img {
+    width: 25%;
+}
+.card div {
+    margin-left: 20px;
+}
+.card .category-title {
+    font-weight: bold;
+}
+.card .pill {
+    background-color: lightblue;
+    border-radius: 15px;
+    padding: 7px 15px 7px 15px;
+    font-size: 12px;
+    margin-right: 10px;
+}
+.pages {
+    text-align: right;
+    margin-bottom: 5px;
+}
