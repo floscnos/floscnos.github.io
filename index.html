@@ -3,27 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="style.css">
 
-    <title>Collectie van schapen</title>
+    <title>Schapencollectie</title>
 </head>
 <body>
 <header>
-    <h1>Mijn collectie van schapen</h1>
-    <h5>Door Floris Cnossen</h5>
-</header>
-</body>
-
-<div class="wrapper">
-    <div class="pages">
-        <a href="#" onclick="renderSheeps(1)">1</a>
-        <a href="#" onclick="renderSheeps(2)">2</a>
-        <a href="#" onclick="renderSheeps(3)">3</a>
+    <div>
+        <h1>Schapencollectie</h1>
+        <h5>Door Floris Cnossen</h5>
     </div>
-    <div class="container" id="card-container">
+    <p onclick="showMobileSidbar()">&#9776;</p>
+</header>
+
+<div id="cover" onclick="showMobileSidbar()"></div>
+
+<div class="mobile-sidebar" id="mobile-sidebar">
+    <div class="mobile-sidebar-header"><h2>Filters</h2></div>
+</div>
+
+<div class="page-wrapper">
+    <div class="sidebar">
+        <div class="sidebar-header"><h2>Filters</h2></div>
+
+        <h3>Categorien</h3>
+        <input id="ruischapen-cb" type="checkbox" name="ruischapen" />
+        <label for="ruischapen-cb">Ruischapen</label><br>
+
+        <input id="melkschapen-cb" type="checkbox" name="melkschapen" />
+        <label for="melkschapen-cb">Melkschapen</label><br>
+
+        <input id="vleesrassen-cb" type="checkbox" name="vleesrassen" />
+        <label for="vleesrassen-cb">Vleesrassen</label><br>
+
+        <input id="buitenlandse-rassen-cb" type="checkbox" name="buitenlandse-rassen" />
+        <label for="buitenlandse-rassen-cb">Buitenlandse rassen</label><br>
+
+    </div>
+
+    <div class="wrapper">
+        <div class="pages">
+            <span id="page-link-1" class="page-link" onclick="renderSheeps(1)">1</span>
+            <span id="page-link-2" class="page-link" onclick="renderSheeps(2)">2</span>
+            <span id="page-link-3" class="page-link" onclick="renderSheeps(3)">3</span>
+        </div>
+        <div class="container" id="card-container">
+        </div>
     </div>
 </div>
 
@@ -66,12 +94,71 @@
             'tags': [],
             'img': 'img/zwartblesschaap.jpg',
         },
+        {
+            'name': 'Texelaar',
+            'category': 'Vleesrassen',
+            'tags': [],
+            'img': 'img/texelaar.jpg',
+        },
+        {
+            'name': 'Swifters',
+            'category': 'Vleesrassen',
+            'tags': [],
+            'img': 'img/swifter.jpg',
+        },
+        {
+            'name': 'Flevolander',
+            'category': 'Vleesrassen',
+            'tags': [],
+            'img': 'img/flevolander.jpg',
+        },
+        {
+            'name': 'Blauwe Texelaar',
+            'category': 'Vleesrassen',
+            'tags': [],
+            'img': 'img/blauwetexelaar.jpg',
+        },
+        {
+            'name': 'Noordhollander',
+            'category': 'Vleesrassen',
+            'tags': [],
+            'img': 'img/noordhollander.jpg',
+        },
+        {
+            'name': 'Ardense Voskop',
+            'category': 'Buitenlandse rassen',
+            'tags': [],
+            'img': 'img/ardensevoskop.jpg',
+        },
+        {
+            'name': 'Ouessant',
+            'category': 'Buitenlandse rassen',
+            'tags': [],
+            'img': 'img/ouessant.jpg',
+        }
+    ]
+
+    const categories = [
+        'Ruischapen',
+        'Melkschapen',
+        'Vleesrassen',
+        'Buitenlandse rassen',
+
+    ]
+
+
+    const pageLinks = [
+        document.getElementById("page-link-1"),
+        document.getElementById("page-link-2"),
+        document.getElementById("page-link-3"),
     ]
 
     const cardContainer = document.getElementById("card-container")
 
     function renderSheeps(page) {
         cardContainer.innerHTML = "";
+
+
 
         for (let i = page * 5 - 5; i < page * 5; i++) {
             sheep = sheeps[i];
@@ -96,33 +183,37 @@
             cardContainer.innerHTML +=
                 '</div>' +
                 '</div>'
-
         }
+
+        pageLinks.forEach(pl => {
+            pl.classList = 'page-link';
+        })
+
+        let pageLink = pageLinks[page-1];
+        pageLink.classList += ' page-link-active';
+
     }
 
+    let mobileSidebarState = false;
+
+    function showMobileSidbar() {
+        const mobileSidebar = document.getElementById("mobile-sidebar");
+        const cover = document.getElementById("cover");
+
+        if (mobileSidebarState == true)
+        {
+            mobileSidebar.style.cssText = "";
+            cover.style.cssText = "";
+            mobileSidebarState = false;
+        } else {
+            mobileSidebar.style.cssText = "left: 0px;";
+            cover.style.cssText = "display: block";
+            mobileSidebarState = true;
+        }
+    }
+    
     renderSheeps(1);
 
-
-        // sheeps.forEach(sheep => {
-        //
-        //     let tagsHTML = ''
-        //     sheep['tags'].forEach(tag => {
-        //         tagsHTML += `<span class="pill">${tag}</span>`
-        //     })
-        //
-        //     cardContainer.innerHTML +=
-        //         '<div class="card">' +
-        //         `<img src="${sheep["img"]}">` +
-        //         '<div>' +
-        //         `<h2>${sheep["name"]}</h2>` +
-        //         `<p class="category-title">${sheep["category"]}</p>` +
-        //         tagsHTML
-        //
-        //     cardContainer.innerHTML +=
-        //         '</div>' +
-        //         '</div>'
-        // })
-
 </script>
-
+</body>
 </html>

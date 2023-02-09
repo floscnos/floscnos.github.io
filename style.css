@@ -4,15 +4,32 @@ html, body {
     font-family: sans-serif;
 }
 header {
-    background-color: #ccc;
+    background-color: #3b82f6;
+    color: white;
     padding: 15px;
     margin-bottom: 25px;
+    border-bottom: 1px solid #cccccc;
+    display: flex;
+    justify-content: space-between;
+}
+header p {
+    font-size: 40px;
+    margin: 0px;
+    padding-right: 10px;
+    cursor: pointer;
+}
+header h1, header h5 {
+    margin: 0px;
+    margin-bottom: 5px;
+}
+.page-wrapper {
+    display: flex;
 }
 .wrapper {
-    width: 66%;
-    margin-left: auto;
-    margin-right: auto;
+    width: 78%;
     margin-bottom: 100px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 .container {
     border: 1px solid #cccccc;
@@ -35,13 +52,74 @@ header {
     font-weight: bold;
 }
 .card .pill {
-    background-color: lightblue;
+    background-color: #3b82f6;
+    color: white;
     border-radius: 15px;
     padding: 7px 15px 7px 15px;
     font-size: 12px;
-    margin-right: 10px;
+    margin-right: 8px;
 }
 .pages {
-    text-align: right;
+    display: flex;
     margin-bottom: 5px;
+}
+.page-link {
+    background-color: #3b82f6;
+    border-radius: 5px;
+    padding: 7px 20px 7px 20px;
+    margin-right: 5px;
+    color: white;
+    cursor: pointer;
+}
+.page-link:hover {
+    background-color: #1d4ed8;
+}
+
+.page-link-active {
+    background-color: #1e40af;
+}
+.sidebar {
+    width: 20%;
+    padding-top: 0px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.sidebar h3 {
+    margin-bottom: 0px;
+}
+.sidebar-header {
+    background-color: #3b82f6;
+    padding: 10px;
+}
+.sidebar h2 {
+    padding: 0px;
+    margin: 0px;
+    margin-bottom: 00px;
+    color: white;
+}
+
+.mobile-sidebar {
+    background-color: #3b82f6;
+    width: 280px;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: -350px;
+    box-shadow: 0 0 20px 0px black;
+    padding: 15px;
+    transition: left 300ms;
+
+}
+.mobile-sidebar-header {
+    color: white;
+}
+#cover {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    opacity: .6;
+    top: 0;
+    left: 0;
 }
