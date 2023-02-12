@@ -7,14 +7,13 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="style.css">
-
+    <script src="https://kit.fontawesome.com/eeaac2951b.js" crossorigin="anonymous"></script>
     <title>Schapencollectie</title>
 </head>
 <body>
 <header>
     <div>
-        <h1>Schapencollectie</h1>
-        <h5>Door Floris Cnossen</h5>
+        <h1>Beeeeeh</h1>
     </div>
     <p onclick="showMobileSidbar()">&#9776;</p>
 </header>
@@ -29,27 +28,25 @@
     <div class="sidebar">
         <div class="sidebar-header"><h2>Filters</h2></div>
 
-        <h3>Categorien</h3>
-        <input id="ruischapen-cb" type="checkbox" name="ruischapen" />
-        <label for="ruischapen-cb">Ruischapen</label><br>
+        <div class="sidebar-filter-section">
+            <h3>Categorien</h3>
 
-        <input id="melkschapen-cb" type="checkbox" name="melkschapen" />
-        <label for="melkschapen-cb">Melkschapen</label><br>
+            <div id="category-filter-list">
+            </div>
+        </div>
 
-        <input id="vleesrassen-cb" type="checkbox" name="vleesrassen" />
-        <label for="vleesrassen-cb">Vleesrassen</label><br>
-
-        <input id="buitenlandse-rassen-cb" type="checkbox" name="buitenlandse-rassen" />
-        <label for="buitenlandse-rassen-cb">Buitenlandse rassen</label><br>
+        <div class="sidebar-header"><h2>Sorteren</h2></div>
+        <div class="sidebar-filter-section">
+            <select id="sort-select">
+            </select>
+        </div>
 
     </div>
 
     <div class="wrapper">
-        <div class="pages">
-            <span id="page-link-1" class="page-link" onclick="renderSheeps(1)">1</span>
-            <span id="page-link-2" class="page-link" onclick="renderSheeps(2)">2</span>
-            <span id="page-link-3" class="page-link" onclick="renderSheeps(3)">3</span>
+        <div class="pages" id="pages">
         </div>
+
         <div class="container" id="card-container">
         </div>
     </div>
@@ -57,142 +54,192 @@
 
 
 <script>
+
+    // Hardcoded data:
+
     const sheeps = [
         {
             'name': 'Maasduinschapen',
             'category': 'Ruischapen',
-            'tags': ['Zelf-ruiend', 'Wit'],
+            'likes': 18,
             'img': 'img/maasduinschapen.jpg',
         },
         {
             'name': 'Nolana schapen',
             'category': 'Ruischapen',
-            'tags': ['Niet-zelf-ruiend'],
+            'likes': 12,
             'img': 'img/nolanaschapen.jpg',
         },
         {
             'name': 'Bruin haarschaap',
             'category': 'Ruischapen',
-            'tags': ['zelf-ruiend'],
+            'likes': 11,
             'img': 'img/bruihaarschaap.jpg',
         },
         {
             'name': 'Fries Melkschaap',
             'category': 'Melkschapen',
-            'tags': [],
+            'likes': 10,
             'img': 'img/friesmelkschaap.jpg',
         },
         {
             'name': 'Belgisch Melkschaap',
             'category': 'Melkschapen',
-            'tags': [],
+            'likes': 9,
             'img': 'img/belgischmelkschaap.png',
         },
         {
             'name': 'Zwartblesschaap',
             'category': 'Vleesrassen',
-            'tags': [],
+            'likes': 8,
             'img': 'img/zwartblesschaap.jpg',
         },
         {
             'name': 'Texelaar',
             'category': 'Vleesrassen',
-            'tags': [],
+            'likes': 7,
             'img': 'img/texelaar.jpg',
         },
         {
             'name': 'Swifters',
             'category': 'Vleesrassen',
-            'tags': [],
+            'likes': 6,
             'img': 'img/swifter.jpg',
         },
         {
             'name': 'Flevolander',
             'category': 'Vleesrassen',
-            'tags': [],
+            'likes': 5,
             'img': 'img/flevolander.jpg',
         },
         {
             'name': 'Blauwe Texelaar',
             'category': 'Vleesrassen',
-            'tags': [],
+            'likes': 4,
             'img': 'img/blauwetexelaar.jpg',
         },
         {
             'name': 'Noordhollander',
             'category': 'Vleesrassen',
-            'tags': [],
+            'likes': 3,
             'img': 'img/noordhollander.jpg',
         },
         {
             'name': 'Ardense Voskop',
             'category': 'Buitenlandse rassen',
-            'tags': [],
+            'likes': 2,
             'img': 'img/ardensevoskop.jpg',
         },
         {
             'name': 'Ouessant',
             'category': 'Buitenlandse rassen',
-            'tags': [],
+            'likes': 1,
             'img': 'img/ouessant.jpg',
         }
     ]
+
+    let sortedSheeps = sheeps;
 
     const categories = [
         'Ruischapen',
         'Melkschapen',
         'Vleesrassen',
         'Buitenlandse rassen',
-
     ]
 
+    var sheepsToRender = [];
 
-    const pageLinks = [
-        document.getElementById("page-link-1"),
-        document.getElementById("page-link-2"),
-        document.getElementById("page-link-3"),
-    ]
+    // Functions:
 
+    const renderSheeps = function () {
+        sheepsToRender = [...sortedSheeps];
+
+        const categories = getCategoryFilterValues();
+        sheepsToRender = sheepsToRender.filter(sheep => categories.includes(sheep['category']))
+
+        let pages = sheepsToRender.length / 6 + 1;
+        renderPageButtons(pages);
+
+        renderPage(1)
+    }
+
+    const renderPageButtons = function (pages) {
+        let pagesContainer = document.getElementById("pages");
+        pagesContainer.innerHTML = ""
+
+        for (let i = 1; i <= pages; i++) {
+            pagesContainer.innerHTML += `
+                <span id="page-link-${i}" class="page-link" page="${i}" onclick="renderPage(${i})">${i}</span>
+            `
+        }
+    }
+
+    const pageButtons = document.getElementsByClassName("page-link");
     const cardContainer = document.getElementById("card-container")
 
-    function renderSheeps(page) {
+    const renderCategoryFilters = function (categories) {
+        const categoriesFilterList = document.getElementById("category-filter-list");
+
+        categories.forEach(category => {
+            categoriesFilterList.innerHTML += `
+                <input class="category-filter-cb" id="${category}-cb" type="checkbox" name="${category}" onclick="renderSheeps()" checked />
+                <label for="${category}-cb">${category}</label><br>
+            `
+        })
+    }
+
+    renderCategoryFilters(categories)
+
+    const getCategoryFilterValues = function () {
+        let filterCategories = document.getElementsByClassName("category-filter-cb");
+
+        let res = [];
+        for (let filterCategory of filterCategories) {
+            if (filterCategory.checked) {
+                res.push(filterCategory.name);
+            }
+        }
+        return res;
+    }
+
+    function renderPage(page) {
         cardContainer.innerHTML = "";
 
-
-
-        for (let i = page * 5 - 5; i < page * 5; i++) {
-            sheep = sheeps[i];
+        for (let i = page * 6 - 6; i < page * 6; i++) {
+            sheep = sheepsToRender[i];
 
             if (sheep == null) {
                 break
             }
 
-            let tagsHTML = ''
-            sheep['tags'].forEach(tag => {
-                tagsHTML += `<span class="pill">${tag}</span>`
-            })
-
-            cardContainer.innerHTML +=
-                '<div class="card">' +
-                `<img src="${sheep["img"]}">` +
-                '<div>' +
-                `<h2>${sheep["name"]}</h2>` +
-                `<p class="category-title">${sheep["category"]}</p>` +
-                tagsHTML
+            cardContainer.innerHTML += `<div class="card">
+                <img src="${sheep['img']}">
+                <div class="card-subcontent">
+                    <div>
+                        <h1 class="card-title">${sheep["name"]}</h1>
+                        <p class="category-title">${sheep["category"]}</p>
+                    </div>
+                    <div>
+                        <i class="fa-regular fa-thumbs-up fa-xl"></i> ${sheep["likes"]}
+                    </div>
+                </div>
+            </div>`
 
             cardContainer.innerHTML +=
                 '</div>' +
                 '</div>'
         }
 
-        pageLinks.forEach(pl => {
-            pl.classList = 'page-link';
-        })
+        for (let pageButton of pageButtons) {
+            pageButton.classList = 'page-link';
+        }
 
-        let pageLink = pageLinks[page-1];
+        let pageLink = pageButtons[page-1];
         pageLink.classList += ' page-link-active';
 
     }
+
+    renderSheeps();
 
     let mobileSidebarState = false;
 
@@ -211,8 +258,48 @@
             mobileSidebarState = true;
         }
     }
-    
-    renderSheeps(1);
+
+
+    const sortDefault = function () {
+        sortedSheeps = [...sheeps];
+        renderSheeps();
+    }
+
+    const sortByLikes = function () {
+        sortedSheeps = [...sheeps];
+        sortedSheeps.sort(function (a, b) {
+            return a['likes'] - b['likes'];
+        })
+
+        renderSheeps();
+    }
+
+    const sortOptions = {
+        'default': {
+            'label': 'Selecteer een optie...',
+            'function': sortDefault,
+        },
+        'likes': {
+            'label': 'Likes',
+            'function': sortByLikes,
+        }
+    }
+
+    const renderSortingOptions = function (sortOptions) {
+        let sortSelect = document.getElementById("sort-select");
+        sortSelect.innerHTML = ""
+        for (const [key, details] of Object.entries(sortOptions)) {
+            sortSelect.innerHTML += `<option value="${key}">${details['label']}</option>`
+        }
+    }
+
+    renderSortingOptions(sortOptions)
+
+    document.getElementById("sort-select").addEventListener('change', function (e) {
+        let sort = sortOptions[e.target.value].function;
+        sort();
+    }, false)
+
 
 </script>
 </body>
