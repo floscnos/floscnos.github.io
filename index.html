@@ -15,13 +15,27 @@
     <div>
         <h1>Beeeeeh</h1>
     </div>
-    <p onclick="showMobileSidbar()">&#9776;</p>
+    <p id="hamburger-menu" onclick="showMobileSidebar()">&#9776;</p>
 </header>
 
-<div id="cover" onclick="showMobileSidbar()"></div>
+<div id="cover" onclick="showMobileSidebar()"></div>
 
 <div class="mobile-sidebar" id="mobile-sidebar">
     <div class="mobile-sidebar-header"><h2>Filters</h2></div>
+
+    <div class="sidebar-filter-section">
+        <h3>Categorien</h3>
+
+        <div id="category-filter-list-mobile"></div>
+    </div>
+
+    <div class="mobile-sidebar-header"><h2>Sorteren</h2></div>
+    <div class="sidebar-filter-section">
+        <p>Sorteer bij:</p>
+        <select id="sort-select-mobile">
+        </select>
+    </div>
+
 </div>
 
 <div class="page-wrapper">
@@ -37,6 +51,7 @@
 
         <div class="sidebar-header"><h2>Sorteren</h2></div>
         <div class="sidebar-filter-section">
+            <p>Sorteer bij:</p>
             <select id="sort-select">
             </select>
         </div>
@@ -53,254 +68,7 @@
 </div>
 
 
-<script>
+<script src="app.js"></script>
 
-    // Hardcoded data:
-
-    const sheeps = [
-        {
-            'name': 'Maasduinschapen',
-            'category': 'Ruischapen',
-            'likes': 18,
-            'img': 'img/maasduinschapen.jpg',
-        },
-        {
-            'name': 'Nolana schapen',
-            'category': 'Ruischapen',
-            'likes': 12,
-            'img': 'img/nolanaschapen.jpg',
-        },
-        {
-            'name': 'Bruin haarschaap',
-            'category': 'Ruischapen',
-            'likes': 11,
-            'img': 'img/bruihaarschaap.jpg',
-        },
-        {
-            'name': 'Fries Melkschaap',
-            'category': 'Melkschapen',
-            'likes': 10,
-            'img': 'img/friesmelkschaap.jpg',
-        },
-        {
-            'name': 'Belgisch Melkschaap',
-            'category': 'Melkschapen',
-            'likes': 9,
-            'img': 'img/belgischmelkschaap.png',
-        },
-        {
-            'name': 'Zwartblesschaap',
-            'category': 'Vleesrassen',
-            'likes': 8,
-            'img': 'img/zwartblesschaap.jpg',
-        },
-        {
-            'name': 'Texelaar',
-            'category': 'Vleesrassen',
-            'likes': 7,
-            'img': 'img/texelaar.jpg',
-        },
-        {
-            'name': 'Swifters',
-            'category': 'Vleesrassen',
-            'likes': 6,
-            'img': 'img/swifter.jpg',
-        },
-        {
-            'name': 'Flevolander',
-            'category': 'Vleesrassen',
-            'likes': 5,
-            'img': 'img/flevolander.jpg',
-        },
-        {
-            'name': 'Blauwe Texelaar',
-            'category': 'Vleesrassen',
-            'likes': 4,
-            'img': 'img/blauwetexelaar.jpg',
-        },
-        {
-            'name': 'Noordhollander',
-            'category': 'Vleesrassen',
-            'likes': 3,
-            'img': 'img/noordhollander.jpg',
-        },
-        {
-            'name': 'Ardense Voskop',
-            'category': 'Buitenlandse rassen',
-            'likes': 2,
-            'img': 'img/ardensevoskop.jpg',
-        },
-        {
-            'name': 'Ouessant',
-            'category': 'Buitenlandse rassen',
-            'likes': 1,
-            'img': 'img/ouessant.jpg',
-        }
-    ]
-
-    let sortedSheeps = sheeps;
-
-    const categories = [
-        'Ruischapen',
-        'Melkschapen',
-        'Vleesrassen',
-        'Buitenlandse rassen',
-    ]
-
-    var sheepsToRender = [];
-
-    // Functions:
-
-    const renderSheeps = function () {
-        sheepsToRender = [...sortedSheeps];
-
-        const categories = getCategoryFilterValues();
-        sheepsToRender = sheepsToRender.filter(sheep => categories.includes(sheep['category']))
-
-        let pages = sheepsToRender.length / 6 + 1;
-        renderPageButtons(pages);
-
-        renderPage(1)
-    }
-
-    const renderPageButtons = function (pages) {
-        let pagesContainer = document.getElementById("pages");
-        pagesContainer.innerHTML = ""
-
-        for (let i = 1; i <= pages; i++) {
-            pagesContainer.innerHTML += `
-                <span id="page-link-${i}" class="page-link" page="${i}" onclick="renderPage(${i})">${i}</span>
-            `
-        }
-    }
-
-    const pageButtons = document.getElementsByClassName("page-link");
-    const cardContainer = document.getElementById("card-container")
-
-    const renderCategoryFilters = function (categories) {
-        const categoriesFilterList = document.getElementById("category-filter-list");
-
-        categories.forEach(category => {
-            categoriesFilterList.innerHTML += `
-                <input class="category-filter-cb" id="${category}-cb" type="checkbox" name="${category}" onclick="renderSheeps()" checked />
-                <label for="${category}-cb">${category}</label><br>
-            `
-        })
-    }
-
-    renderCategoryFilters(categories)
-
-    const getCategoryFilterValues = function () {
-        let filterCategories = document.getElementsByClassName("category-filter-cb");
-
-        let res = [];
-        for (let filterCategory of filterCategories) {
-            if (filterCategory.checked) {
-                res.push(filterCategory.name);
-            }
-        }
-        return res;
-    }
-
-    function renderPage(page) {
-        cardContainer.innerHTML = "";
-
-        for (let i = page * 6 - 6; i < page * 6; i++) {
-            sheep = sheepsToRender[i];
-
-            if (sheep == null) {
-                break
-            }
-
-            cardContainer.innerHTML += `<div class="card">
-                <img src="${sheep['img']}">
-                <div class="card-subcontent">
-                    <div>
-                        <h1 class="card-title">${sheep["name"]}</h1>
-                        <p class="category-title">${sheep["category"]}</p>
-                    </div>
-                    <div>
-                        <i class="fa-regular fa-thumbs-up fa-xl"></i> ${sheep["likes"]}
-                    </div>
-                </div>
-            </div>`
-
-            cardContainer.innerHTML +=
-                '</div>' +
-                '</div>'
-        }
-
-        for (let pageButton of pageButtons) {
-            pageButton.classList = 'page-link';
-        }
-
-        let pageLink = pageButtons[page-1];
-        pageLink.classList += ' page-link-active';
-
-    }
-
-    renderSheeps();
-
-    let mobileSidebarState = false;
-
-    function showMobileSidbar() {
-        const mobileSidebar = document.getElementById("mobile-sidebar");
-        const cover = document.getElementById("cover");
-
-        if (mobileSidebarState == true)
-        {
-            mobileSidebar.style.cssText = "";
-            cover.style.cssText = "";
-            mobileSidebarState = false;
-        } else {
-            mobileSidebar.style.cssText = "left: 0px;";
-            cover.style.cssText = "display: block";
-            mobileSidebarState = true;
-        }
-    }
-
-
-    const sortDefault = function () {
-        sortedSheeps = [...sheeps];
-        renderSheeps();
-    }
-
-    const sortByLikes = function () {
-        sortedSheeps = [...sheeps];
-        sortedSheeps.sort(function (a, b) {
-            return a['likes'] - b['likes'];
-        })
-
-        renderSheeps();
-    }
-
-    const sortOptions = {
-        'default': {
-            'label': 'Selecteer een optie...',
-            'function': sortDefault,
-        },
-        'likes': {
-            'label': 'Likes',
-            'function': sortByLikes,
-        }
-    }
-
-    const renderSortingOptions = function (sortOptions) {
-        let sortSelect = document.getElementById("sort-select");
-        sortSelect.innerHTML = ""
-        for (const [key, details] of Object.entries(sortOptions)) {
-            sortSelect.innerHTML += `<option value="${key}">${details['label']}</option>`
-        }
-    }
-
-    renderSortingOptions(sortOptions)
-
-    document.getElementById("sort-select").addEventListener('change', function (e) {
-        let sort = sortOptions[e.target.value].function;
-        sort();
-    }, false)
-
-
-</script>
 </body>
 </html>

@@ -8,7 +8,7 @@ html, body {
     font-family: sans-serif;
 }
 header {
-    background-color: #3b82f6;
+    background-color: #2563EB;
     color: white;
     padding: 15px;
     margin-bottom: 25px;
@@ -29,6 +29,9 @@ header h1, header h5 {
 h1, h2 {
     font-family: "Cabinet Grotesk";
     font-weight: 600;
+}
+#hamburger-menu {
+    display: none;
 }
 .page-wrapper {
     display: flex;
@@ -78,20 +81,12 @@ h1, h2 {
     margin-top: 5px;
     margin-bottom: 12px;
 }
-.card .pill {
-    background-color: #3b82f6;
-    color: white;
-    border-radius: 15px;
-    padding: 7px 15px 7px 15px;
-    font-size: 12px;
-    margin-right: 8px;
-}
 .pages {
     display: flex;
     margin-bottom: 15px;
 }
 .page-link {
-    background-color: #3b82f6;
+    background-color: #2563EB;
     border-radius: 5px;
     padding: 7px 20px 7px 20px;
     margin-right: 5px;
@@ -111,12 +106,27 @@ h1, h2 {
     padding-left: 15px;
     padding-right: 15px;
 }
+@media only screen and (max-width: 1320px) {
+    .sidebar {
+        display: none;
+    }
+    .wrapper {
+        width: 100%;
+    }
+    .card {
+        flex-basis: 45%;
+        max-width: 100%;
+    }
+    #hamburger-menu {
+        display: block;
+    }
+}
 .sidebar h3 {
     margin-bottom: 0px;
     margin-top: 0px;
 }
 .sidebar-header {
-    background-color: #3b82f6;
+    background-color: #2563EB;
     padding-top: 3px;
     padding-bottom: 3px;
     padding-left: 10px;
@@ -138,8 +148,9 @@ h1, h2 {
     width: 100%;
 }
 .mobile-sidebar {
-    background-color: #3b82f6;
-    width: 280px;
+    background-color: #2563EB;
+    width: 80%;
+    max-width: 280px;
     height: 100%;
     position: fixed;
     top: 0;
@@ -147,9 +158,6 @@ h1, h2 {
     box-shadow: 0 0 20px 0px black;
     padding: 15px;
     transition: left 300ms;
-
-}
-.mobile-sidebar-header {
     color: white;
 }
 #cover {
@@ -161,4 +169,7 @@ h1, h2 {
     opacity: .6;
     top: 0;
     left: 0;
+}
+.like-button {
+    cursor: pointer;
 }
