@@ -185,6 +185,16 @@ const changePage = function (page) {
     renderPage(page);
 }
 
+const updateActivePageStyles = function (page) {
+    for (let pageButton of pageButtons) {
+        pageButton.classList = 'page-link';
+    }
+    let activePageButton = pageButtons[page-1];
+    activePageButton.classList += ' page-link-active';
+
+    document.title = `${page} | Schapencollectie`;
+}
+
 const renderPage = function (page) {
     cardContainer.innerHTML = "";
 
@@ -212,11 +222,7 @@ const renderPage = function (page) {
             '</div>' +
             '</div>'
     }
-    for (let pageButton of pageButtons) {
-        pageButton.classList = 'page-link';
-    }
-    let activePageButton = pageButtons[page-1];
-    activePageButton.classList += ' page-link-active';
+    updateActivePageStyles(page);
 }
 
 renderSheeps();
@@ -245,16 +251,31 @@ const sortDefault = function () {
     renderSheeps();
 }
 
-const sortByName = function () {
+const sortByNameAsc = function () {
     sortedSheeps = [...sheeps];
     sortedSheeps.sort((a, b) => (a.name > b.name) ? 1 : -1)
     renderSheeps();
 }
 
-const sortByLikes = function () {
+const sortByNameDesc = function () {
+    sortedSheeps = [...sheeps];
+    sortedSheeps.sort((a, b) => (a.name < b.name) ? 1 : -1)
+    renderSheeps();
+}
+
+const sortByLikesAsc = function () {
     sortedSheeps = [...sheeps];
     sortedSheeps.sort(function (a, b) {
         return a['likes'] - b['likes'];
+    })
+
+    renderSheeps();
+}
+
+const sortByLikesDesc = function () {
+    sortedSheeps = [...sheeps];
+    sortedSheeps.sort(function (a, b) {
+        return b['likes'] - a['likes'];
     })
 
     renderSheeps();
@@ -265,13 +286,21 @@ const sortOptions = {
         'label': 'Selecteer een optie...',
         'function': sortDefault,
     },
-    'likes': {
-        'label': 'Likes',
-        'function': sortByLikes,
+    'likesAsc': {
+        'label': 'Likes - oplopend',
+        'function': sortByLikesAsc,
     },
-    'name': {
-        'label': 'Naam',
-        'function': sortByName,
+    'likesDesc': {
+        'label': 'Likes - aflopend',
+        'function': sortByLikesDesc,
+    },
+    'nameAsc': {
+        'label': 'Naam - oplopend',
+        'function': sortByNameAsc,
+    },
+    'nameDesc': {
+        'label': 'Naam - aflopend',
+        'function': sortByNameDesc,
     }
 }
 
